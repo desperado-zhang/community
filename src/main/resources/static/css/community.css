@@ -10,3 +10,14 @@ body{
     float:right;
     margin-bottom:15px;
 }
+
+.media-object{
+    width:38px!important;
+    height:38px!important;
+}
+
+.text-desc{
+    font-size:12px;
+    font-weight:normal;
+    color:#999;
+}
