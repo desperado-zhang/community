@@ -94,7 +94,6 @@ public class QuestionService {
         return paginationDTO;
     }
 
-
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.getById(id);
         QuestionDTO questionDTO = new QuestionDTO();
@@ -102,5 +101,16 @@ public class QuestionService {
         User user = userMapper.findById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
+    }
+
+    public void createOrupdate(Question question) {
+        if(question.getId() == null){
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModify(question.getGmtCreate());
+            questionMapper.create(question);
+        }else{
+            question.setGmtModify(question.getGmtCreate());
+            questionMapper.update(question);
+        }
     }
 }
