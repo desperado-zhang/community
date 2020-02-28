@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<link>
+    <title>麻将社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css"></link>
+    <link rel="stylesheet" href="../css/community.css"></link>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script type="application/javascript" src="../js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:insert="~{navigation :: nav}"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <div class="jumpbotron">
+                <h1>出错了!!!</h1>
+                <p th:text="${message}">稍后再试。。。</p>
+                <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>
