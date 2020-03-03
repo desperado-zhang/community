@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomizeExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    ModelAndView handle(HttpServletRequest request, Throwable e, Model model){
+    ModelAndView handle(Throwable e, Model model){
         if(e instanceof CustomizeException){
             model.addAttribute("message", e.getMessage());
         }else{
-            model.addAttribute("message","服务器冒烟了，稍后试试...");
+            model.addAttribute("message","服务器冒烟了啊，稍后试试...");
         }
         return new ModelAndView("error");
     }
