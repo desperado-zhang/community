@@ -2,11 +2,14 @@ package life.majiang.community.service;
 
 import life.majiang.community.dto.PaginationDTO;
 import life.majiang.community.dto.QuestionDTO;
+import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
+import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.mapper.QuestionExtMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.model.Comment;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.QuestionExample;
 import life.majiang.community.model.User;
@@ -66,7 +69,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
 
         Integer totalPage;
@@ -106,7 +109,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
 
         if(question == null){
@@ -139,10 +142,40 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.incView(question);
+    }
+
+    @Service
+    public static class CommentService {
+
+        @Autowired
+        private CommentMapper commentMapper;
+
+        @Autowired
+        private QuestionMapper questionMapper;
+
+        public void insert(Comment comment) {
+            if(comment.getParentId() == null || comment.getParentId() == 0){
+                throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
+            }
+
+            if(comment.getType() == null || !CommentTypeEnum.isExist(comment.getType())){
+                throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
+            }
+
+            if(comment.getType() == CommentTypeEnum.COMMENT.getType()){
+                Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+                if(dbComment == null){
+                    throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FUND);
+                }
+                commentMapper.insert(comment);
+            }else{
+                questionMapper.selectByPrimaryKey(comment.getParentId());
+            }
+        }
     }
 }
